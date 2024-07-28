@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Summarizer</title>
+
+	<!-- Bootstrap CSS-->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+<body>
+	<div class="col-12 p-4 text-center">
+		<div class="container">
+			<div class="text-center justify-content-center">
+				<div class="m-3">
+					<h1>Summarizer</h1>
+					<h5>Choose 1 of the 3 summarizers to get started!</h5>
+				</div>
+
+				<div class="col-sm-10">
+					<!-- Nav tabs -->
+					<ul class="nav nav-tabs justify-content-center" role="tablist">
+						<li class="nav-item">
+							<a class="nav-link {% if content['current-tab'] == 'url' %} active {%endif%}" href="#website" role="tab" data-toggle="tab">
+								<h4>Webpage Summarization</h4>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {% if content['current-tab'] == 'text' %} active {%endif%}" href="#text" role="tab" data-toggle="tab">
+								<h4>Text Summarization</h4>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {% if content['current-tab'] == 'pdf' %} active {%endif%}" href="#pdf" role="tab" data-toggle="tab">
+								<h4>PDF Summarization</h4>
+							</a>
+						</li>
+					</ul>
+				  
+					  <!-- Tab panes -->
+					<div class="tab-content">
+		
+						<div class="tab-pane {% if content['current-tab'] == 'url' %} active {%endif%}" id="website">
+							<div class="text-center">
+								<div class="m-5">
+									<h1>Website Summary</h1>
+								</div>
+								<form method="post" action="{{url_for('index')}}">
+									<div class="input-group col-sm-6 mb-3 align-self-center m-auto">
+										<input required name="url" type="text" class="form-control" placeholder="Website URL" aria-label="Website URL" aria-describedby="button-addon2" value="{{content['url']}}">
+										<div class="input-group-append">
+											<button class="btn btn-outline-info btn-large" type="submit" id="button-addon2">Summarize</button>
+										</div>
+										{% if content['url-error'] %}
+											<h3 style="color: rgb(222, 66, 66)">The url you have inputted is not valid. Please try again.</h3>
+										{% endif %}
+									</div>
+								</form>
+								
+								{% if content['type'] and content['type'] == 'url' %}
+									<h1>Summary</h1>
+									<p>{{content['summary']}}</p>
+								{% endif %}
+							</div>
+						</div>
+		
+						<div class="tab-pane {% if content['current-tab'] == 'text' %} active {%endif%}" id="text">
+							<div class="text-center">
+								<div class="m-5">
+									<h1>Text Summary</h1>
+								</div>
+								<form method="post" action="{{url_for('index')}}">
+									<div class="form-floating col-sm-6 mb-3 align-self-center m-auto">
+										<textarea name="text" required class="form-control" placeholder="Please type a minimum of 300 characters into the text box" id="floatingTextarea" style="height: 20%;" >{{content['text']}}</textarea>
+										<button class="btn btn-outline-info btn-large mt-2" type="submit" id="button-addon2" style="width: 100%;">Summarize</button>
+										{% if content['text-error'] %}
+											<h3 style="color: rgb(222, 66, 66)">The text you have inputted is not valid. Please try again.</h3>
+										{% endif %}
+										
+									</div>
+								</form>
+								{% if content['type'] and content['type'] == 'text' %}
+									<h1>Summary</h1>
+									<p>{{content['summary']}}</p>
+								{% endif %}
+							</div>
+						</div>
+		
+						<div class="tab-pane {% if content['current-tab'] == 'pdf' %} active {%endif%}" id="pdf">
+							<div class="text-center">
+								<div class="m-5">
+									<h1>PDF Summary</h1>
+								</div>
+								<form method="post" action="{{url_for('index')}}" enctype="multipart/form-data">
+									<div class="col-sm-6 mb-3 m-auto">
+										<label for="formFile" class="form-label">Please provide a PDF file for summarizing.</label>
+										<input name="pdf" class="form-control" type="file" id="formFile" accept=".pdf" required>
+										<button class="btn btn-outline-info btn-large mt-2" type="submit" id="button-addon2" style="width: 100%;">Summarize</button>
+										{% if content['pdf-error'] %}
+												<h3 style="color: rgb(222, 66, 66)">The file you have inputted is not valid. Please try again.</h3>
+										{% endif %}
+									</div>
+								</form>
+								{% if content['type'] and content['type'] == 'pdf' %}
+										<h1>Summary</h1>
+										<p>{{content['summary']}}</p>
+								{% endif %}
+							</div>
+						</div>
+		
+		
+					</div>
+				</div>
+			</div>
+
+			
+			
+			
+		</div>
+	</div>
+</body>
+
+<!--Bootstrap JS-->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
